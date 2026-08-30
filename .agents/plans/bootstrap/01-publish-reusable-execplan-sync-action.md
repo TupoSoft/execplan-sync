@@ -14,7 +14,7 @@ Make the proven ExecPlan-to-GitHub synchronization behavior reusable by reposito
 - [x] (2026-08-30) Add compatibility, pagination, configuration, dry-run, and adapter tests.
 - [x] (2026-08-30) Document secure installation, permissions, adoption, and recovery.
 - [x] (2026-08-30) Validate the source, committed bundle, repository fixture, and a read-only LeadEmailFinder dry run.
-- [ ] Publish the implementation pull request with a linked issue.
+- [x] (2026-08-30) Publish pull request #2, assigned to the requesting maintainer and linked to issue #1.
 
 ## Plan dependencies
 
@@ -28,6 +28,7 @@ None.
 - Vitest inherited a Windows temporary directory that is not writable from WSL. Running validation with `TMPDIR=/tmp TEMP=/tmp TMP=/tmp` keeps its transform cache inside WSL without affecting CI runners.
 - The managed `execplan` label must be the issue authority boundary. Marker text is writable by public issue authors, so synchronization ignores unlabelled lookalikes and fails closed only when a labelled managed issue has a missing, malformed, or duplicate marker.
 - Repository-level workflow concurrency cannot serialize traffic from other repositories that share the same App installation. The adapter serializes reads and paces mutations within one invocation, while adopters must stagger or centrally coordinate installation-wide synchronization.
+- The authenticated GitHub CLI token initially lacked the `workflow` scope, so GitHub correctly rejected the first push containing CI configuration. After the user explicitly authorized that scope, the same reviewed commit pushed successfully without rewriting it.
 
 ## Decision Log
 
@@ -61,7 +62,9 @@ None.
 
 ## Outcomes & Retrospective
 
-The reusable Action, pure parser, narrow GitHub ports, paginated REST adapter, committed bundle, tests, CI, and secure adoption guidance are implemented. A read-only run against the live LeadEmailFinder `master` and Project 9 found all 70 plans unchanged, with no creates, updates, or orphans. The public repository also has full-SHA Action restrictions, protected default-branch and release-tag rulesets, secret scanning, private vulnerability reporting, and automated dependency security updates. Pull-request delivery remains in progress.
+The reusable Action, pure parser, narrow GitHub ports, paginated REST adapter, committed bundle, tests, CI, and secure adoption guidance are implemented and delivered in pull request #2. A read-only run against the live LeadEmailFinder `master` and Project 9 found all 70 plans unchanged, with no creates, updates, or orphans. The public repository also has full-SHA Action restrictions, protected default-branch and release-tag rulesets, secret scanning, private vulnerability reporting, and automated dependency security updates. The pull request's required `Quality` check passed on implementation commit `015ee500ad9bc29c4720440b7c277143453a4f83`.
+
+No release tag is published yet. The bootstrap ruleset requires a pull request and strict CI but cannot require an independent approval while only one maintainer has write access. Add a second maintainer or team, then enable at least one approval and CODEOWNERS review before publishing the first release.
 
 ## Context and Orientation
 
@@ -130,8 +133,11 @@ Validation evidence from 2026-08-30:
 - The bundled Action validated this repository's checked-in bootstrap plan without a token.
 - A dry run against live LeadEmailFinder `master` commit `4779625c376a926d71e86e2122a1d1eee3931bec` reported 70 unchanged plans, zero creates, zero updates, zero orphans, and no proposed status changes.
 - Bootstrap issue: <https://github.com/TupoSoft/execplan-sync/issues/1>.
+- Implementation commit: `015ee500ad9bc29c4720440b7c277143453a4f83`.
+- Pull request: <https://github.com/TupoSoft/execplan-sync/pull/2>.
+- GitHub Actions `Quality` check: passed in 28 seconds on the implementation commit.
 
-Record the pull-request URL and final Action commit SHA after delivery. Never record a token, private key, authorization header, or secret value.
+Never record a token, private key, authorization header, or secret value.
 
 ## Plan readiness
 
