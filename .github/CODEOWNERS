@@ -1,10 +1,10 @@
-* @KyryloKupin
+* @TupoSoft/core
 
-/.github/ @KyryloKupin
-/action.yml @KyryloKupin
-/src/ @KyryloKupin
-/dist/ @KyryloKupin
-/package.json @KyryloKupin
-/package-lock.json @KyryloKupin
-/LICENSE @KyryloKupin
-/SECURITY.md @KyryloKupin
+/.github/ @TupoSoft/core
+/action.yml @TupoSoft/core
+/src/ @TupoSoft/core
+/dist/ @TupoSoft/core
+/package.json @TupoSoft/core
+/package-lock.json @TupoSoft/core
+/LICENSE @TupoSoft/core
+/SECURITY.md @TupoSoft/core
