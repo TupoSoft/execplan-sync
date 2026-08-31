@@ -15,6 +15,7 @@ Make the proven ExecPlan-to-GitHub synchronization behavior reusable by reposito
 - [x] (2026-08-30) Document secure installation, permissions, adoption, and recovery.
 - [x] (2026-08-30) Validate the source, committed bundle, repository fixture, and a read-only LeadEmailFinder dry run.
 - [x] (2026-08-30) Publish pull request #2, assigned to the requesting maintainer and linked to issue #1.
+- [x] (2026-08-31) Assign TupoSoft Core as code owner and enforce one independent code-owner approval.
 
 ## Plan dependencies
 
@@ -29,6 +30,7 @@ None.
 - The managed `execplan` label must be the issue authority boundary. Marker text is writable by public issue authors, so synchronization ignores unlabelled lookalikes and fails closed only when a labelled managed issue has a missing, malformed, or duplicate marker.
 - Repository-level workflow concurrency cannot serialize traffic from other repositories that share the same App installation. The adapter serializes reads and paces mutations within one invocation, while adopters must stagger or centrally coordinate installation-wide synchronization.
 - The authenticated GitHub CLI token initially lacked the `workflow` scope, so GitHub correctly rejected the first push containing CI configuration. After the user explicitly authorized that scope, the same reviewed commit pushed successfully without rewriting it.
+- GitHub requires the OAuth `admin:org` scope to attach an organization team to a repository. After explicit authorization, Core received write access and became eligible for CODEOWNERS enforcement without receiving unnecessary repository administration through the team grant.
 
 ## Decision Log
 
@@ -59,12 +61,15 @@ None.
 - Decision: Require the managed `execplan` label before adopting an existing issue.
   Rationale: Public issue authors control issue body marker text but cannot apply repository labels; marker-only adoption would let an untrusted author redirect synchronization into their issue.
   Date/Author: 2026-08-30, Codex.
+- Decision: Make `@TupoSoft/core` the sole code owner and require one matching approval on the default branch.
+  Rationale: Team ownership avoids a single-maintainer review boundary, while explicit write access is the least privilege GitHub accepts for CODEOWNERS eligibility.
+  Date/Author: 2026-08-31, user and Codex.
 
 ## Outcomes & Retrospective
 
-The reusable Action, pure parser, narrow GitHub ports, paginated REST adapter, committed bundle, tests, CI, and secure adoption guidance are implemented and delivered in pull request #2. A read-only run against the live LeadEmailFinder `master` and Project 9 found all 70 plans unchanged, with no creates, updates, or orphans. The public repository also has full-SHA Action restrictions, protected default-branch and release-tag rulesets, secret scanning, private vulnerability reporting, and automated dependency security updates. The pull request's required `Quality` check passed on implementation commit `015ee500ad9bc29c4720440b7c277143453a4f83`.
+The reusable Action, pure parser, narrow GitHub ports, paginated REST adapter, committed bundle, tests, CI, and secure adoption guidance are implemented and delivered in pull request #2. A read-only run against the live LeadEmailFinder `master` and Project 9 found all 70 plans unchanged, with no creates, updates, or orphans. The public repository also has full-SHA Action restrictions, protected default-branch and release-tag rulesets, secret scanning, private vulnerability reporting, and automated dependency security updates. The pull request's required `Quality` check passed on implementation commit `015ee500ad9bc29c4720440b7c277143453a4f83` and on CODEOWNERS commit `52d6e2e527d4cd76dbf81f8c2afac93ad3e9ec03`.
 
-No release tag is published yet. The bootstrap ruleset requires a pull request and strict CI but cannot require an independent approval while only one maintainer has write access. Add a second maintainer or team, then enable at least one approval and CODEOWNERS review before publishing the first release.
+No release tag is published yet. TupoSoft Core now has explicit repository write access, owns every path through `.github/CODEOWNERS`, and is requested on pull request #2. Default-branch ruleset `21876418` requires one approval from a matching code owner in addition to the strict `Quality` check, so the pull request remains intentionally blocked until a Core teammate reviews it.
 
 ## Context and Orientation
 
@@ -136,6 +141,8 @@ Validation evidence from 2026-08-30:
 - Implementation commit: `015ee500ad9bc29c4720440b7c277143453a4f83`.
 - Pull request: <https://github.com/TupoSoft/execplan-sync/pull/2>.
 - GitHub Actions `Quality` check: passed in 28 seconds on the implementation commit.
+- TupoSoft Core: explicit `push` permission, sole CODEOWNERS team, and requested reviewer on pull request #2.
+- Default-branch ruleset `21876418`: one approval and code-owner review required with no bypass actors.
 
 Never record a token, private key, authorization header, or secret value.
 
