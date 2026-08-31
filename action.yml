@@ -1,0 +1,77 @@
+name: ExecPlan Sync
+description: Validate repository-owned ExecPlans and synchronize their issues to a GitHub Project
+author: TupoSoft
+
+inputs:
+    mode:
+        description: Run local validation or synchronize GitHub state
+        required: false
+        default: sync
+    github-token:
+        description: GitHub App installation token; required only in sync mode
+        required: false
+    workspace:
+        description: Absolute path to the checked-out caller repository
+        required: false
+    plans-directory:
+        description: Repository-relative directory containing feature ExecPlans
+        required: false
+    repository:
+        description: Source repository in owner/name form; defaults to the caller repository
+        required: false
+    source-ref:
+        description: Branch, tag, or commit used in generated source links
+        required: false
+    project-owner:
+        description: Organization that owns the target GitHub Project
+        required: false
+    project-number:
+        description: Number of the target GitHub Project
+        required: false
+    status-field:
+        description: Name of the target Project single-select status field
+        required: false
+        default: Status
+    backlog-status:
+        description: Project option representing dependency-gated or blocked plans
+        required: false
+        default: Backlog
+    todo-status:
+        description: Project option representing actionable unstarted plans
+        required: false
+        default: Todo
+    in-progress-status:
+        description: Project option representing started plans
+        required: false
+        default: In Progress
+    done-status:
+        description: Project option representing completed plans
+        required: false
+        default: Done
+    issue-generator:
+        description: Generator name rendered in managed issue bodies
+        required: false
+        default: execplan-sync
+    dry-run:
+        description: Read GitHub state and report changes without mutating it
+        required: false
+
+outputs:
+    plans:
+        description: Number of discovered ExecPlans
+    created:
+        description: Number of issues created or proposed
+    updated:
+        description: Number of issues updated or proposed
+    unchanged:
+        description: Number of unchanged issues
+    orphaned:
+        description: Number of generated issues whose source plan is absent
+
+runs:
+    using: node24
+    main: dist/index.js
+
+branding:
+    icon: check-square
+    color: green

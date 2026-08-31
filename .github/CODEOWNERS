@@ -1,0 +1,10 @@
+* @TupoSoft/core
+
+/.github/ @TupoSoft/core
+/action.yml @TupoSoft/core
+/src/ @TupoSoft/core
+/dist/ @TupoSoft/core
+/package.json @TupoSoft/core
+/package-lock.json @TupoSoft/core
+/LICENSE @TupoSoft/core
+/SECURITY.md @TupoSoft/core

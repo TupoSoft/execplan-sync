@@ -1,0 +1,46 @@
+{
+    "name": "@tuposoft/execplan-sync",
+    "version": "0.1.0",
+    "description": "Validate repository-owned ExecPlans and synchronize them to GitHub Projects",
+    "private": true,
+    "type": "module",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TupoSoft/execplan-sync.git"
+    },
+    "homepage": "https://github.com/TupoSoft/execplan-sync#readme",
+    "bugs": {
+        "url": "https://github.com/TupoSoft/execplan-sync/issues"
+    },
+    "packageManager": "npm@11.17.0",
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "build": "ncc build src/action.ts -o dist --license licenses.txt --minify",
+        "bundle:check": "npm run build && git diff --exit-code -- dist",
+        "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run bundle:check",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "lint": "eslint .",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@actions/core": "3.0.1",
+        "@actions/github": "9.1.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "10.0.1",
+        "@types/node": "24.13.3",
+        "@vercel/ncc": "0.45.0",
+        "eslint": "10.9.1",
+        "prettier": "3.9.6",
+        "tsx": "4.23.13",
+        "typescript": "6.0.3",
+        "typescript-eslint": "8.68.0",
+        "vitest": "4.1.11"
+    }
+}
